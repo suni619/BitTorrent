@@ -1,4 +1,4 @@
-package com.suni619.tracker;
+package com.ase.tracker;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,9 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Map;
+
+import org.pixie.bencoding.BDecoder;
 
 public class Client {
 
@@ -50,6 +53,11 @@ public class Client {
 			String response;
 			response = reader.readLine();
 			System.out.println(response);
+			
+		       String bstring = "8:failInfo6:Reason8:warnInfo7:Message8:interval2:608:complete1:16:incomp1:15:peersld7:peer_id8:id_peer12:ip9:localhost4:port5:13001ed7:peer_id8:id_peer12:ip9:localhost4:port5:13001ee";
+			BDecoder bdecoder = new BDecoder();
+			Map<String, Object> map = bdecoder.decode(response);
+			System.out.println(map);
 		} catch (MalformedURLException e) {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();

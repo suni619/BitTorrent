@@ -1,4 +1,4 @@
-package com.suni619.tracker;
+package com.ase.tracker;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -48,7 +48,7 @@ public class TrackerController extends HttpServlet {
 		String left = request.getParameter("left");
 		String event = request.getParameter("event");
 		String parts = request.getParameter("parts");
-		String ip = "192.168.1.2";
+		String ip = "localhost";
 
 		// process received info
 		System.out.println("Received: " + file + " " + infoHash + " " + peerId
@@ -102,11 +102,11 @@ public class TrackerController extends HttpServlet {
 
 		// create tracker response
 		Map<String, Object> responseMap = new HashMap<String, Object>();
-		responseMap.put("failureReason", "Reason for failure");
-		responseMap.put("warningMessage", "Message for warning");
+		responseMap.put("failInfo", "Reason");
+		responseMap.put("warnInfo", "Message");
 		responseMap.put("interval", 60 + "");
 		responseMap.put("complete", seedersTable.size() + "");
-		responseMap.put("incomplete", leechersTable.size() + "");
+		responseMap.put("incomp", leechersTable.size() + "");
 
 		// get the list of peers with the file required
 		List<String> peersWithFile = new ArrayList<String>();

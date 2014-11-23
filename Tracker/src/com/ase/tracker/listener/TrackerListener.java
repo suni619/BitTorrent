@@ -44,7 +44,7 @@ public class TrackerListener implements ServletContextListener {
     	
     	// seed info in the peers table
     	Map<String, String> peerInfo = new HashMap<String, String>();
-    	peerInfo.put("ip", "192.168.1.1");
+    	peerInfo.put("ip", "localhost");
     	peerInfo.put("port", "13000");
     	peerInfo.put("parts", "111");
     	peersTable.put("id_peer1", peerInfo);

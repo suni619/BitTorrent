@@ -13,17 +13,17 @@ public class BencodeUtil {
 		// TODO Auto-generated method stub
 		StringBuilder bencodedResponse = new StringBuilder();
 		
-		bencodedResponse.append("d");
-		bencodedResponse.append("failureReason".length() + ":failureReason");
-		bencodedResponse.append(((String)responseMap.get("failureReason")).length() + ":" + (String)responseMap.get("failureReason"));
-		bencodedResponse.append("warningMessage".length() + ":warningMessage");
-		bencodedResponse.append(((String)responseMap.get("warningMessage")).length() + ":" + (String)responseMap.get("warningMessage"));
+//		bencodedResponse.append("d");
+		bencodedResponse.append("failInfo".length() + ":failInfo");
+		bencodedResponse.append(((String)responseMap.get("failInfo")).length() + ":" + (String)responseMap.get("failInfo"));
+		bencodedResponse.append("warnInfo".length() + ":warnInfo");
+		bencodedResponse.append(((String)responseMap.get("warnInfo")).length() + ":" + (String)responseMap.get("warnInfo"));
 		bencodedResponse.append("interval".length() + ":interval");
 		bencodedResponse.append(((String)responseMap.get("interval")).length() + ":" + (String)responseMap.get("interval"));
 		bencodedResponse.append("complete".length() + ":complete");
 		bencodedResponse.append(((String)responseMap.get("complete")).length() + ":" + (String)responseMap.get("complete"));
-		bencodedResponse.append("incomplete".length() + ":incomplete");
-		bencodedResponse.append(((String)responseMap.get("incomplete")).length() + ":" + (String)responseMap.get("incomplete"));
+		bencodedResponse.append("incomp".length() + ":incomp");
+		bencodedResponse.append(((String)responseMap.get("incomp")).length() + ":" + (String)responseMap.get("incomp"));
 		
 		bencodedResponse.append("peers".length() + ":peers");
 		bencodedResponse.append("l");
@@ -38,13 +38,15 @@ public class BencodeUtil {
 			bencodedResponse.append(((String)peerMap.get("ip")).length() + ":" + (String)peerMap.get("ip"));
 			bencodedResponse.append("port".length() + ":port");
 			bencodedResponse.append(((String)peerMap.get("port")).length() + ":" + (String)peerMap.get("port"));
+			bencodedResponse.append("parts".length() + ":parts");
+			bencodedResponse.append(((String)peerMap.get("parts")).length() + ":" + (String)peerMap.get("parts"));
 			
 			bencodedResponse.append("e");
 		}
 		// end list
 		bencodedResponse.append("e");
 		// end dictionary
-		bencodedResponse.append("e");
+//		bencodedResponse.append("e");
 		
 		return bencodedResponse.toString();
 	}
