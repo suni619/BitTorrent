@@ -40,13 +40,13 @@ public class TrackerListener implements ServletContextListener {
     	// at least one seed must be present
     	List<String> peerList = new ArrayList<String>();
     	peerList.add("id_peer1");
-    	seedersTable.put("file1", peerList);
+    	seedersTable.put("sample.ppt", peerList);
     	
     	// seed info in the peers table
     	Map<String, String> peerInfo = new HashMap<String, String>();
     	peerInfo.put("ip", "localhost");
-    	peerInfo.put("port", "13000");
-    	peerInfo.put("parts", "111");
+    	peerInfo.put("port", "13001");
+    	peerInfo.put("parts", "111111");
     	peersTable.put("id_peer1", peerInfo);
     	
     	// add the hash tables to the application context
