@@ -23,10 +23,10 @@ public class Server {
 	public void startServer(String portNumber, String baseDir) throws IOException {
 		int port = Integer.parseInt(portNumber);
 		ServerSocket server = new ServerSocket(port);
-		System.out.println("Server started");
+		System.out.println("Ready to serve");
 		while (getRunning()) {
 			Socket client = server.accept();
-			System.out.println("Client connected");
+//			System.out.println("Client connected");
 			DataInputStream giveFile = new DataInputStream(client.getInputStream());
 			String fileName = giveFile.readUTF();
 			System.out.println("Client asking for " + fileName);
@@ -34,7 +34,7 @@ public class Server {
 			InputStream in = new FileInputStream(baseDir + fileName);
 			IOUtils.copy(in, os);
 			client.close();
-			System.out.println("Server sent file to client");
+//			System.out.println("Server sent file to client");
 		}
 		server.close();
 	}

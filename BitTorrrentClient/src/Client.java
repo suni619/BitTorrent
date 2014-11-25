@@ -14,14 +14,14 @@ public class Client {
 	public void startClient(String ip, String portNumber, String destFilePath, String downloadFile) throws UnknownHostException, IOException {
 		int port = Integer.parseInt(portNumber);
 		Socket socket = new Socket(ip, port);
-		System.out.println("Client connected to server");
+//		System.out.println("Client connected to server");
 		DataOutputStream askFile = new DataOutputStream(socket.getOutputStream());
 		askFile.writeUTF(downloadFile);
 		InputStream is = socket.getInputStream();
 		OutputStream os = new FileOutputStream(destFilePath);
 		IOUtils.copy(is, os);
 		socket.close();
-		System.out.println("Received file from server");
+//		System.out.println("Received file from server");
 	}
 	
 	public static void main(String[] args) {

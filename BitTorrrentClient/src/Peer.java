@@ -20,9 +20,10 @@ import org.pixie.bencoding.BDecoder;
 public class Peer {
 
 	public static void main(String[] args) {
-		final String portNumber = "13003";
-		String peerId = "id_peer3";
-		final String baseDir = "peer3/";
+		String peerConfig = "2";
+		final String portNumber = "1300" + peerConfig;
+		String peerId = "id_peer" + peerConfig;
+		final String baseDir = "peer" + peerConfig + "/";
 		String fileName = "sample.ppt";
 		String torrentName = fileName + ".torrent";
 		
@@ -42,7 +43,6 @@ public class Peer {
 				try {
 					server.startServer(portNumber, baseDir);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -76,24 +76,8 @@ public class Peer {
 		List<Map<String, Object>> peersList = (List<Map<String, Object>>) peersInfo.get("peers");
 
 		// connect to peers and download
-		System.out.println(peersList);
-//		for (Map<String, Object> peer : peersList) {
-//			// if not self
-//			if (!((String) peer.get("peer_id")).equals(peerId)){
-//				Client client = new Client();
-//				String ip = (String) peer.get("ip");
-//				String port = (String) peer.get("port");
-//				try {
-//					client.startClient(ip, port, baseDir + fileName);
-//				} catch (IOException e) {
-//					System.out.println("Peer not available or might have choked");
-//					e.printStackTrace();
-//				}
-//				
-//			}
-//		}
+		System.out.println("Peers in swarm: " + peersList);
 		
-		// start 
 		// piece download strategy
 		Map<String, Object> strategyMap = new TreeMap<String, Object>();
 		for (Map<String, Object> peer : peersList) {
@@ -113,51 +97,43 @@ public class Peer {
 				}
 			}
 		}
-		System.out.println(strategyMap);
-		
-//		List<Map<String, String>> temp = (List<Map<String, String>>) strategyMap.get("0");
-//		Map<String, String> map = new HashMap<String, String>();
-//		map.put("port", "15000");
-//		map.put("parts", "111111");
-//		map.put("peer_id", "id_peer5");
-//		map.put("ip", "localhost");
-//		temp.add(map);
-//		strategyMap.put("0", temp);
-//		System.out.println(strategyMap);
+		System.out.println("General piece download strategy: " + strategyMap);
 		
 		// get rarest first order
 		  
 		Map<String, Object> rarestFirstMap = sortByComparator(strategyMap);
-		System.out.println(rarestFirstMap);
+		System.out.println("Rarest first strategy" + rarestFirstMap);
 		
 		// get parts
 		for (Entry<String, Object> partInfo : rarestFirstMap.entrySet()) {
 			String part = partInfo.getKey();
 			List<Map<String, String>> partPeers = (List<Map<String, String>>) partInfo.getValue();
 			
-			int peerNumber = new Random().nextInt(partPeers.size());
-			Map<String, String> partPeer = partPeers.get(peerNumber);
-			String port = (String) partPeer.get("port");
-			String ip = (String) partPeer.get("ip");
-			String partPeerId = (String) partPeer.get("peer_id");
-			
-			// download logic here
-			System.out.println("Download part " + part + " from " + partPeerId);
-			Client client = new Client();
-			try {
-				client.startClient(ip, port, baseDir + fileName + ".part" + part, fileName + ".part" + part);
-			} catch (IOException e) {
-				System.out.println("Peer not available or might have choked");
-				e.printStackTrace();
-			}
+			boolean downloadFailed;
+			do {
+				downloadFailed = false;
+				int peerNumber = new Random().nextInt(partPeers.size());
+				Map<String, String> partPeer = partPeers.get(peerNumber);
+				String port = (String) partPeer.get("port");
+				String ip = (String) partPeer.get("ip");
+				String partPeerId = (String) partPeer.get("peer_id");
+				
+				// download logic 
+				System.out.println("Download part " + part + " from " + partPeerId);
+				Client client = new Client();
+				try {
+					client.startClient(ip, port, baseDir + fileName + ".part" + part, fileName + ".part" + part);
+				} catch (IOException e) {
+					System.out.println("Peer not available or might have choked");
+					downloadFailed = true;
+				}
+			} while(downloadFailed);
 		}
-		
-		// end
 		
 		// recreate the file after downloading all the parts
 		int numParts = parts.length();
 		if (FileUtil.recreateFile(baseDir, fileName, numParts)) {
-			System.out.println("Downloaded successfully");
+			System.out.println(fileName + " downloaded.");
 			
 			// inform tracker
 			Map<String, Object> informInfo = new HashMap<String, Object>();
@@ -181,7 +157,7 @@ public class Peer {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Informed: " + informInfo);
+//			System.out.println("Informed: " + informInfo);
 			
 		} else {
 			System.out.println("Download error: All parts not downloaded.");

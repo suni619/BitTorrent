@@ -182,18 +182,17 @@ public class FileUtil {
 			}
 			File temp = new File(recreatedFileDir +"/" + recreatedFileName + ".part" + (parts.length-1));
 			byte[] buffer = new byte[((parts.length - 1) * CHUNK_SIZE) + ((int) temp.length())  ];
-			System.out.println((int)parts[parts.length - 1].length());
 			for (int part = 0; part < parts.length; part++) {
 				String partName = recreatedFileDir +"/" + recreatedFileName + ".part" + part;
 				File partFile = new File(partName);
 				System.out.println("From file: " + partFile.getName()
-						+ "of size: " + partFile.length());
+						+ " of size: " + partFile.length());
 				FileInputStream fis = new FileInputStream(partFile);
 				fis.read(buffer, part * CHUNK_SIZE,(int) partFile.length());// CHUNK_SIZE);
 				fis.close();
 			}
 			fos.write(buffer);
-			System.out.println("Recreated file successfully : " + buffer.length);
+			System.out.println("Created file successfully : " + buffer.length + " bytes");
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
