@@ -38,8 +38,9 @@ public class FileUtil {
 		System.out.println("Url: " + metainfo.get("url"));
 
 		// recreate the complete file from parts
-		String recreatedFilePath = "seed/recreated_sample.ppt";
-		recreateFile(recreatedFilePath);
+		String recreatedFileDir = "seed";
+		String recreatedFileName = "sample.ppt";
+		recreateFile(recreatedFileDir, recreatedFileName, 6);
 	}
 
 	/**
@@ -162,11 +163,12 @@ public class FileUtil {
 	/**
 	 * Recreates the complete file from the parts in the given directory
 	 */
-	public static void recreateFile(String pathName) {
+	public static boolean recreateFile(String recreatedFileDir, String recreatedFileName, int numParts) {
+		recreatedFileDir = recreatedFileDir.replace("/", "");
 		FileOutputStream fos = null;
 		try {
-			fos = new FileOutputStream(new File(pathName));
-			File dir = new File("seed");
+			fos = new FileOutputStream(new File(recreatedFileDir + "/" + recreatedFileName));
+			File dir = new File(recreatedFileDir);
 			File[] parts = dir.listFiles(new FilenameFilter() {
 
 				@Override
@@ -174,19 +176,24 @@ public class FileUtil {
 					return name.contains(".part");
 				}
 			});
-
-			byte[] buffer = new byte[parts.length * CHUNK_SIZE];
+			
+			if (parts.length != 6) {
+				return false;
+			}
+			File temp = new File(recreatedFileDir +"/" + recreatedFileName + ".part" + (parts.length-1));
+			byte[] buffer = new byte[((parts.length - 1) * CHUNK_SIZE) + ((int) temp.length())  ];
+			System.out.println((int)parts[parts.length - 1].length());
 			for (int part = 0; part < parts.length; part++) {
-				String partName = "seed/sample.ppt.part" + part;
+				String partName = recreatedFileDir +"/" + recreatedFileName + ".part" + part;
 				File partFile = new File(partName);
 				System.out.println("From file: " + partFile.getName()
 						+ "of size: " + partFile.length());
 				FileInputStream fis = new FileInputStream(partFile);
-				fis.read(buffer, part * CHUNK_SIZE, CHUNK_SIZE);
+				fis.read(buffer, part * CHUNK_SIZE,(int) partFile.length());// CHUNK_SIZE);
 				fis.close();
 			}
 			fos.write(buffer);
-			System.out.println("Recreated file successfully");
+			System.out.println("Recreated file successfully : " + buffer.length);
 		} catch (IOException e) {
 			System.out.println(e.getLocalizedMessage());
 			e.printStackTrace();
@@ -199,6 +206,7 @@ public class FileUtil {
 				e.printStackTrace();
 			}
 		}
+		return true;
 	}
 
 	/**

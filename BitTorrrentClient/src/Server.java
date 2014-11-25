@@ -1,3 +1,4 @@
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,15 +20,18 @@ public class Server {
 		return this.running;
 	}
 
-	public void startServer(String portNumber) throws IOException {
+	public void startServer(String portNumber, String baseDir) throws IOException {
 		int port = Integer.parseInt(portNumber);
 		ServerSocket server = new ServerSocket(port);
 		System.out.println("Server started");
 		while (getRunning()) {
 			Socket client = server.accept();
 			System.out.println("Client connected");
+			DataInputStream giveFile = new DataInputStream(client.getInputStream());
+			String fileName = giveFile.readUTF();
+			System.out.println("Client asking for " + fileName);
 			OutputStream os = client.getOutputStream();
-			InputStream in = new FileInputStream("seed/sample.ppt");
+			InputStream in = new FileInputStream(baseDir + fileName);
 			IOUtils.copy(in, os);
 			client.close();
 			System.out.println("Server sent file to client");
@@ -38,7 +42,7 @@ public class Server {
 	public static void main(String[] args) {
 		Server server = new Server();
 		try {
-			server.startServer("13000");
+			server.startServer("13000", "seed/");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

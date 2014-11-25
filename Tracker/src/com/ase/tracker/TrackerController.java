@@ -87,11 +87,20 @@ public class TrackerController extends HttpServlet {
 			System.out.println("handling stop event");
 
 		} else if (event.equals("completed")) {
-			// update seeders table
+			// update seeders table to add new seeder
 			System.out.println("updating seeders table");
 			List<String> seeders = (List<String>) seedersTable.get(file);
 			seeders.add(peerId);
 			seedersTable.put(file, seeders);
+			
+			// update leechers table to remove the peer as leecher
+			List<String> leechers = (List<String>) leechersTable.get(file);
+			leechers.remove(peerId);
+			leechersTable.put(file, leechers);
+			
+			// update peers table for parts
+			System.out.println("Updating peers table");
+			((Map<String, String>) peersTable.get(peerId)).put("parts", parts);
 
 		} else {
 			// update peers table for parts

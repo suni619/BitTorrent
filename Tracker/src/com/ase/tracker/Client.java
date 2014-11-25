@@ -15,15 +15,15 @@ public class Client {
 
 	public static void main(String[] args) {
 		try {
-			String file = "file1";
+			String file = "sample.ppt";
 			String infoHash = "infohash";
 			String peerId = "id_peer2";
 			String port = "13002";
 			String uploaded = "0";
 			String downloaded = "0";
-			String left = "3";
-			String event = "started";
-			String parts = "000";
+			String left = "0";
+			String event = "completed";
+			String parts = "111111";
 			
 			String baseUrl = "http://localhost:8080/Tracker/rest.tracker?";
 			String encodeType = "UTF-8";

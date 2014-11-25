@@ -1,3 +1,4 @@
+import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,10 +11,12 @@ import org.apache.commons.io.IOUtils;
 
 public class Client {
 
-	public void startClient(String ip, String portNumber, String destFilePath) throws UnknownHostException, IOException {
+	public void startClient(String ip, String portNumber, String destFilePath, String downloadFile) throws UnknownHostException, IOException {
 		int port = Integer.parseInt(portNumber);
 		Socket socket = new Socket(ip, port);
 		System.out.println("Client connected to server");
+		DataOutputStream askFile = new DataOutputStream(socket.getOutputStream());
+		askFile.writeUTF(downloadFile);
 		InputStream is = socket.getInputStream();
 		OutputStream os = new FileOutputStream(destFilePath);
 		IOUtils.copy(is, os);
@@ -24,7 +27,7 @@ public class Client {
 	public static void main(String[] args) {
 		Client client = new Client();
 		try {
-			client.startClient("localhost", "13000", "received_sample.ppt");
+			client.startClient("localhost", "13000", "received_sample.ppt", "sample.ppt");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

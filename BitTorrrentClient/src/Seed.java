@@ -9,7 +9,7 @@ public class Seed {
 		// start server
 		Server server = new Server();
 		try {
-			server.startServer(portNumber);
+			server.startServer(portNumber, "seed/");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
