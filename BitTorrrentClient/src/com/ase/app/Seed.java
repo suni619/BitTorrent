@@ -1,4 +1,7 @@
+package com.ase.app;
 import java.io.IOException;
+
+import com.ase.model.Server;
 
 
 public class Seed {
@@ -11,7 +14,7 @@ public class Seed {
 		try {
 			server.startServer(portNumber, "seed/");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Problem with creating seed.");
 		}
 	}
 

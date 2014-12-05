@@ -1,3 +1,4 @@
+package com.ase.app;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -16,11 +17,27 @@ import java.util.TreeMap;
 
 import org.pixie.bencoding.BDecoder;
 
+import com.ase.model.Client;
+import com.ase.model.Server;
+import com.ase.utility.FileUtil;
+import com.ase.utility.TrackerUtil;
+
 
 public class Peer {
 
+	@SuppressWarnings({ "unchecked", "unused" })
 	public static void main(String[] args) {
 		String peerConfig = "2";
+		if (args.length == 1){
+			peerConfig = args[0];
+		} else if (args.length == 0) {
+			// OK
+		} else {
+			// invalid usage
+			System.out.println("Invalid command");
+			System.out.println("Usage: java -jar Peer.java <Peer number>");
+			System.exit(0);
+		}
 		final String portNumber = "1300" + peerConfig;
 		String peerId = "id_peer" + peerConfig;
 		final String baseDir = "peer" + peerConfig + "/";
@@ -43,7 +60,7 @@ public class Peer {
 				try {
 					server.startServer(portNumber, baseDir);
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println("There is a problem with creating server");
 				}
 			}
 		});
@@ -60,16 +77,15 @@ public class Peer {
 		try {
 			String response = TrackerUtil.getTrackerResponse(trackerUrl, infoHash, peerId, portNumber,
 					uploaded, downloaded, left, event, parts);
-			BDecoder bdecoder = new BDecoder();
-			peersInfo = bdecoder.decode(response);
+			peersInfo = BDecoder.decode(response);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			System.out.println("Decoding failed");
 		} catch (MalformedURLException e) {
-			e.printStackTrace();
+			System.out.println("Decoding failed");
 		} catch (ProtocolException e) {
-			e.printStackTrace();
+			System.out.println("Decoding failed");
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Decoding failed");
 		}
 		
 		// get peers list
@@ -146,16 +162,15 @@ public class Peer {
 				parts = "111111";
 				String response = TrackerUtil.getTrackerResponse(trackerUrl, infoHash, peerId, portNumber,
 						uploaded, downloaded, left, event, parts);
-				BDecoder bdecoder = new BDecoder();
-				informInfo = bdecoder.decode(response);
+				informInfo = BDecoder.decode(response);
 			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
+				System.out.println("Decoding failed");
 			} catch (MalformedURLException e) {
-				e.printStackTrace();
+				System.out.println("Decoding failed");
 			} catch (ProtocolException e) {
-				e.printStackTrace();
+				System.out.println("Decoding failed");
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.out.println("Decoding failed");
 			}
 //			System.out.println("Informed: " + informInfo);
 			
@@ -175,7 +190,8 @@ public class Peer {
         // Sorting the list based on values
         Collections.sort(list, new Comparator<Entry<String, Object>>()
         {
-            public int compare(Entry<String, Object> o1,
+            @SuppressWarnings("unchecked")
+			public int compare(Entry<String, Object> o1,
                     Entry<String, Object> o2)
             {
                     return ((Integer)((List<Map<String, Object>>)o1.getValue()).size()).compareTo((Integer)((List<Map<String, Object>>)o2.getValue()).size());

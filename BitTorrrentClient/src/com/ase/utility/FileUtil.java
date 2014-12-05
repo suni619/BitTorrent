@@ -1,3 +1,4 @@
+package com.ase.utility;
 
 
 import java.io.BufferedReader;
@@ -20,7 +21,6 @@ public class FileUtil {
 	public static final int CHUNK_SIZE = 256000;
 
 	public static void main(String[] args) {
-		// createFile();
 
 		String pathName = "seed/sample.ppt";
 

@@ -1,3 +1,4 @@
+package com.ase.model;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -24,13 +25,22 @@ public class Client {
 //		System.out.println("Received file from server");
 	}
 	
-	public static void main(String[] args) {
-		Client client = new Client();
-		try {
-			client.startClient("localhost", "13000", "received_sample.ppt", "sample.ppt");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static void main(final String[] args) {
+		Thread clientThread = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				Client client = new Client();
+				try {
+					client.startClient(args[0], args[1], args[2], args[3]);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		clientThread.setDaemon(true);
+		clientThread.start();
 	}
 
 }

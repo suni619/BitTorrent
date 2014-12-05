@@ -1,3 +1,4 @@
+package com.ase.utility;
 
 
 import java.io.BufferedReader;
@@ -32,9 +33,7 @@ public class TrackerUtil {
 			String response = getTrackerResponse(file, infoHash, peerId, port,
 					uploaded, downloaded, left, event, parts);
 			
-		       String bstring = "8:failInfo6:Reason8:warnInfo7:Message8:interval2:608:complete1:16:incomp1:15:peersld7:peer_id8:id_peer12:ip9:localhost4:port5:13001ed7:peer_id8:id_peer12:ip9:localhost4:port5:13001ee";
-			BDecoder bdecoder = new BDecoder();
-			Map<String, Object> map = bdecoder.decode(response);
+			Map<String, Object> map = BDecoder.decode(response);
 			System.out.println(map);
 		} catch (MalformedURLException e) {
 			System.out.println(e.getLocalizedMessage());
